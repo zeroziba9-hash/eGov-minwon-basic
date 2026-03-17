@@ -132,6 +132,44 @@ mvn clean package
 
 ---
 
+## 🗃️ SQL 테이블 설정 방법
+### 1) H2 (기본)
+- `h2` 프로파일에서는 애플리케이션 시작 시 아래 파일로 자동 생성됩니다.
+- 파일: `src/main/resources/schema.sql`
+
+```sql
+CREATE TABLE IF NOT EXISTS minwon (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(200) NOT NULL,
+    content CLOB,
+    status VARCHAR(20) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+### 2) MySQL (수동 생성)
+`mysql` 프로파일로 실행할 경우, DB/테이블을 먼저 만들어 주세요.
+
+```sql
+CREATE DATABASE IF NOT EXISTS minwon
+  DEFAULT CHARACTER SET utf8mb4
+  DEFAULT COLLATE utf8mb4_general_ci;
+
+USE minwon;
+
+CREATE TABLE IF NOT EXISTS minwon (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(200) NOT NULL,
+    content TEXT,
+    status VARCHAR(20) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+> MySQL 접속 정보는 `src/main/resources/spring/context-datasource-mysql.xml`에서 수정합니다.
+
+---
+
 ## 📌 참고
 - DB 스키마: `src/main/resources/schema.sql` (H2 시작 시 초기화)
 - 감사 로그 설정: `src/main/resources/logback.xml`
