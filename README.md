@@ -57,14 +57,49 @@
 
 ---
 
-## 🗂️ 패키지 구조
-- `egov.minwon.web` : Controller
-- `egov.minwon.web.auth` : 로그인/인증 인터셉터
-- `egov.minwon.web.common` : 공통 예외/감사 처리
-- `egov.minwon.service` : Service / VO
-- `egov.minwon.service.impl` : ServiceImpl / Mapper
-- `src/main/resources/mappers` : MyBatis XML
-- `src/main/webapp/WEB-INF/jsp` : JSP View
+## 🗂️ 패키지/폴더 구조
+```text
+egov-minwon-basic/
+├─ src/
+│  └─ main/
+│     ├─ java/
+│     │  └─ egov/minwon/
+│     │     ├─ web/
+│     │     │  ├─ MinwonController.java
+│     │     │  ├─ auth/
+│     │     │  │  ├─ AuthController.java
+│     │     │  │  └─ LoginInterceptor.java
+│     │     │  └─ common/
+│     │     │     ├─ GlobalExceptionHandler.java
+│     │     │     └─ AuditInterceptor.java
+│     │     ├─ service/
+│     │     │  ├─ MinwonService.java
+│     │     │  └─ MinwonVO.java
+│     │     └─ service/impl/
+│     │        ├─ MinwonServiceImpl.java
+│     │        └─ MinwonMapper.java
+│     ├─ resources/
+│     │  ├─ mappers/
+│     │  │  └─ MinwonMapper.xml
+│     │  ├─ spring/
+│     │  │  ├─ context-common.xml
+│     │  │  ├─ context-datasource-h2.xml
+│     │  │  └─ context-datasource-mysql.xml
+│     │  ├─ mybatis-config.xml
+│     │  ├─ schema.sql
+│     │  └─ logback.xml
+│     └─ webapp/
+│        ├─ index.jsp
+│        └─ WEB-INF/
+│           ├─ web.xml
+│           ├─ config/springmvc/action-servlet.xml
+│           └─ jsp/
+│              ├─ auth/login.jsp
+│              ├─ common/error.jsp
+│              └─ minwon/list.jsp
+├─ pom.xml
+└─ README.md
+```
 
 ---
 
@@ -197,4 +232,3 @@ CREATE TABLE IF NOT EXISTS minwon (
 ## 📌 참고
 - DB 스키마: `src/main/resources/schema.sql` (H2 시작 시 초기화)
 - 감사 로그 설정: `src/main/resources/logback.xml`
-- 상세 체크리스트: `EGOVFRAME_CHECKLIST.md`
