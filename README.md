@@ -27,7 +27,7 @@
 
 ---
 
-## 🧰 기술 스택 + 선택 이유
+## 🧰 기술 스택
 
 ![Java](https://img.shields.io/badge/Java-8-007396?logo=openjdk&logoColor=white)
 ![Spring MVC](https://img.shields.io/badge/Spring%20MVC-5.x-6DB33F?logo=spring&logoColor=white)
