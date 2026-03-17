@@ -82,6 +82,8 @@
 ## 🧩 주요 코드
 
 ### 1) eGov 스타일 Service 구현
+> 비즈니스 로직 계층을 eGov 공통 서비스 베이스(`EgovAbstractServiceImpl`)로 통일합니다.
+
 ```java
 @Service("minwonService")
 public class MinwonServiceImpl extends EgovAbstractServiceImpl implements MinwonService {
@@ -94,6 +96,8 @@ public class MinwonServiceImpl extends EgovAbstractServiceImpl implements Minwon
 ```
 
 ### 2) eGov Mapper 적용
+> SQL 매퍼 인터페이스를 eGov `@Mapper`로 등록해 데이터 접근 계층을 명확히 분리합니다.
+
 ```java
 @Mapper("minwonMapper")
 public interface MinwonMapper {
@@ -102,6 +106,8 @@ public interface MinwonMapper {
 ```
 
 ### 3) 인증 인터셉터 등록
+> `/minwon/**` 요청은 로그인 세션을 선검증하여 비인가 접근을 차단합니다.
+
 ```xml
 <mvc:interceptors>
     <mvc:interceptor>
@@ -112,6 +118,8 @@ public interface MinwonMapper {
 ```
 
 ### 4) 전역 예외 처리
+> 컨트롤러 전반의 예외를 공통 에러 페이지로 일관되게 처리합니다.
+
 ```java
 @ControllerAdvice
 public class GlobalExceptionHandler {
