@@ -32,6 +32,7 @@ mvn clean package
 - 기본 로그인/세션 인터셉터 적용 (`/login.do`)
 - 전역 예외 처리(`@ControllerAdvice`) 적용
 - DB 프로파일 분리: `h2`(기본), `mysql`
+- 로깅/감사 로그: `logback.xml`, `AuditInterceptor`
 - 상세 체크리스트: `EGOVFRAME_CHECKLIST.md`
 
 ## 참고

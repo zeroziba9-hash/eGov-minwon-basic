@@ -15,7 +15,7 @@
 - [x] 공통컴포넌트(기본 로그인/세션 인터셉터) 적용
 - [x] 전역 예외 처리(`@ControllerAdvice`) 보강
 - [x] 운영 DB(MySQL) 기준 프로파일 분리(H2/mysql)
-- [ ] 표준 로깅/감사 로그 정책 반영
+- [x] 표준 로깅/감사 로그 정책 반영(logback + AuditInterceptor)
 
 ## 메모
 - 현재 프로젝트는 “완전한 eGovFrame 표준 템플릿”이라기보다,

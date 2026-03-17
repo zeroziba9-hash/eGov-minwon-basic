@@ -14,8 +14,14 @@
     <context:component-scan base-package="egov.minwon.web"/>
 
     <bean id="loginInterceptor" class="egov.minwon.web.auth.LoginInterceptor"/>
+    <bean id="auditInterceptor" class="egov.minwon.web.common.AuditInterceptor"/>
 
     <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/resources/**"/>
+            <ref bean="auditInterceptor"/>
+        </mvc:interceptor>
         <mvc:interceptor>
             <mvc:mapping path="/minwon/**"/>
             <mvc:exclude-mapping path="/login.do"/>
