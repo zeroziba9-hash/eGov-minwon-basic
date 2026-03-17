@@ -1,121 +1,70 @@
-# Discord Dice Bot 🎲
+# egov-minwon-basic
 
-디스코드에서 **버튼 + 모달 UI**로 주사위를 굴릴 수 있는 Java 기반 봇입니다.  
-기본 범위(1~999)로 빠르게 사용하거나, 범위를 직접 설정해 연속으로 랜덤 숫자를 생성할 수 있습니다.
+전자정부프레임워크(eGovFrame) 스타일을 반영한 **민원 처리 MVP** 프로젝트입니다.  
+(현재 로컬 폴더명은 `egov-minwon-skeleton`이지만, GitHub 레포명은 `egov-minwon-basic` 권장)
 
 ---
 
 ## 1) 프로젝트 개요
+- 목적: 간단한 민원 등록/조회/상태변경 흐름 구현
+- 구조: Spring MVC + MyBatis + JSP + eGovFrame RTE 일부 반영
+- 산출물: WAR (`target/egov-minwon-skeleton-0.0.1-SNAPSHOT.war`)
 
-- **프로젝트명**: Discord Dice Bot
-- **목적**: 텍스트 명령형 랜덤 기능을, 반복 사용에 편한 인터랙션 UI로 개선
-- **핵심 포인트**
-  - `!주사위` 입력 시 UI 패널 표시
-  - `🎲 굴리기` 버튼으로 같은 범위 연속 생성
-  - `⚙ 범위설정` 버튼으로 최소/최대 변경
-  - 범위 검증(최소 1, 최대 999, min ≤ max)
+## 2) 주요 기능
+- 민원 목록 조회
+- 민원 등록
+- 민원 상태 변경 (접수 / 처리중 / 완료)
+- 로그인/로그아웃 (세션 기반)
+- 전역 예외 처리 페이지
+- 감사 로그(Audit) 기록
 
----
+## 3) 기술 스택
+- Java 8
+- Spring MVC
+- MyBatis
+- eGovFrame RTE (`fdl.cmmn`, `psl.dataaccess`)
+- JSP / JSTL
+- H2 (기본), MySQL (프로파일 분리)
+- Maven (WAR 패키징)
 
-## 2) 기술 스택
+## 4) 패키지 구조
+- `egov.minwon.web` : Controller
+- `egov.minwon.service` : Service / VO
+- `egov.minwon.service.impl` : ServiceImpl / Mapper
+- `resources/mappers` : MyBatis XML
+- `WEB-INF/jsp` : JSP View
 
-- **Language**: Java 17+
-- **Library**: JDA 5
-- **Build**: Gradle Wrapper (`gradlew`, `gradlew.bat`)
-- **Runtime**: Discord Bot API (Gateway Event 기반)
-
----
-
-## 3) 주요 기능
-
-### A. UI 기반 주사위
-- 명령어: `!주사위`
-- 봇이 임베드 패널 + 버튼 2개를 출력
-  - `🎲 굴리기`: 현재 범위로 즉시 결과 생성
-  - `⚙ 범위설정`: 모달 입력창으로 min/max 수정
-
-### B. 범위 검증
-- 최소값은 1 이상
-- 최대값은 999 이하
-- 최소값이 최대값보다 클 수 없음
-
-### C. 텍스트 명령 지원 (레거시)
-- `!랜덤`
-- `!랜덤 최소 최대` (예: `!랜덤 5 20`)
-
----
-
-## 4) 배포 (무료 플랜 - Render)
-
-`render.yaml`을 포함해놔서, Render에서 저장소만 연결하면 바로 워커로 배포됩니다.
-
-1. Render 가입/로그인
-2. **New + → Blueprint**
-3. GitHub 저장소 `zeroziba9-hash/discord-dice-bot` 선택
-4. 환경변수 `DISCORD_TOKEN` 입력
-5. Deploy
-
-> 배포 후에는 PC를 꺼도 봇이 계속 동작합니다.
-
-## 5) 로컬 실행 방법
-
-### 1) 저장소 클론
+## 5) 실행 방법
+### 5-1. 빌드
 ```bash
-git clone https://github.com/zeroziba9-hash/discord-dice-bot.git
-cd discord-dice-bot/discord-random-bot
+mvn clean package
 ```
 
-### 2) 토큰 설정
-PowerShell:
-```powershell
-$env:DISCORD_TOKEN="여기에_봇_토큰"
-```
+### 5-2. 기본 프로파일(H2)
+- 기본값: `h2`
+- 설정 위치: `WEB-INF/web.xml` (`spring.profiles.default`)
 
-또는 `.env.example` 참고해서 `.env` 생성
+### 5-3. MySQL 프로파일 사용
+1. `web.xml`에서 `spring.profiles.default`를 `mysql`로 변경
+2. `src/main/resources/spring/context-datasource-mysql.xml`의 접속정보 수정
 
-### 3) 실행
-```bash
-./gradlew run
-```
+## 6) 로그인 정보 (테스트)
+- ID: `admin`
+- PW: `1234`
 
----
+## 7) eGovFrame 반영 체크
+- `EgovAbstractServiceImpl` 적용
+- eGov `@Mapper` 적용
+- `.do` URL 패턴 적용
+- 상세 문서: `EGOVFRAME_CHECKLIST.md`
 
-## 5) 디스코드 개발자 포털 설정
+## 8) 로그/감사 정책
+- 설정 파일: `src/main/resources/logback.xml`
+- 감사 인터셉터: `egov.minwon.web.common.AuditInterceptor`
+  - 요청 사용자/메서드/URI/IP
+  - 응답 상태
+  - 예외 발생 정보
 
-- Bot 생성
-- **MESSAGE CONTENT INTENT** 활성화
-- OAuth2 URL Generator
-  - Scopes: `bot`, `applications.commands`
-  - Permissions: `Send Messages`, `Read Message History` (필요시 추가)
-
----
-
-## 6) 포트폴리오 관점에서의 개선 내용
-
-- 단순 텍스트 랜덤 명령에서 **버튼/모달 기반 인터랙션**으로 전환
-- 반복 사용 시 매번 명령어 재입력하지 않도록 **연속 사용 UX** 적용
-- 사용자 입력 오류를 줄이기 위한 **검증 로직** 추가
-- 실사용 서버에서 동작 확인 및 커맨드 흐름 점검
-
----
-
-## 7) 보안
-
-- 토큰은 코드에 하드코딩하지 않음
-- `.env`는 git 커밋 제외 대상
-- 토큰 노출 시 디스코드 포털에서 **즉시 Reset Token** 필요
-
----
-
-## 8) 디렉터리 구조
-
-```text
-discord-dice-bot/
-├─ discord-random-bot/
-│  ├─ src/main/java/org/example/Main.java
-│  ├─ build.gradle
-│  ├─ gradlew
-│  ├─ gradlew.bat
-│  └─ .env.example
-└─ README.md
-```
+## 9) 참고
+- DB 스키마는 `schema.sql`로 초기화됩니다(H2 기준).
+- 첫 화면은 `index.jsp`에서 `/minwon/list.do`로 리다이렉트됩니다.
