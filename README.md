@@ -22,7 +22,7 @@
 ---
 
 ## 🛠️ 개발 도구
-- **Eclipse IDE** 기반으로 개발
+- **Eclipse IDE for Enterprise Java and Web Developers** 기반으로 개발
 - Maven 프로젝트(`war`) 형태로 구성하여 Eclipse + Tomcat 워크플로우에 맞춰 작성
 
 ---
