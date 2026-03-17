@@ -1,69 +1,138 @@
-# egov-minwon-basic
+# 📨 egov-minwon-basic
 
 전자정부프레임워크(eGovFrame) 스타일을 반영한 **민원 처리 MVP** 프로젝트입니다.  
+간단한 CRUD를 넘어, **로그인/권한(세션), 전역 예외 처리, 감사 로그, DB 프로파일 분리**까지 포함해 실무형 구조로 구성했습니다.
 
 ---
 
-## 1) 프로젝트 개요
-- 목적: 간단한 민원 등록/조회/상태변경 흐름 구현
-- 구조: Spring MVC + MyBatis + JSP + eGovFrame RTE 일부 반영
-- 산출물: WAR (`target/egov-minwon-skeleton-0.0.1-SNAPSHOT.war`)
+## ✨ 프로젝트 한 줄 소개
+> 민원 등록 → 조회 → 상태변경 흐름을 eGov 관례에 가깝게 구현한 Spring MVC 기반 웹 애플리케이션
 
-## 2) 주요 기능
+---
+
+## ✅ 주요 기능
 - 민원 목록 조회
 - 민원 등록
 - 민원 상태 변경 (접수 / 처리중 / 완료)
-- 로그인/로그아웃 (세션 기반)
-- 전역 예외 처리 페이지
-- 감사 로그(Audit) 기록
+- 로그인 / 로그아웃 (세션 기반)
+- 인증 인터셉터 기반 접근 제어 (`/minwon/**`)
+- 전역 예외 처리 (`@ControllerAdvice`)
+- 감사 로그(Audit) 기록 (요청/응답/예외)
 
-## 3) 기술 스택
-- Java 8
-- Spring MVC
-- MyBatis
-- eGovFrame RTE (`fdl.cmmn`, `psl.dataaccess`)
-- JSP / JSTL
-- H2 (기본), MySQL (프로파일 분리)
-- Maven (WAR 패키징)
+---
 
-## 4) 패키지 구조
+## 🧰 기술 스택 + 선택 이유
+- **Java 8**
+  - 공공/레거시 환경 호환성이 높고 eGov 프로젝트에서 많이 사용
+- **Spring MVC**
+  - Controller-Service 구조를 명확하게 분리하기 좋고 eGov 스타일과 궁합이 좋음
+- **MyBatis**
+  - SQL을 직접 제어하기 쉬워 CRUD/조회 로직을 명확히 관리 가능
+- **eGovFrame RTE (`fdl.cmmn`, `psl.dataaccess`)**
+  - `EgovAbstractServiceImpl`, eGov Mapper 등 표준 관례 반영 가능
+- **JSP / JSTL**
+  - 전통적인 eGov 웹 화면 구성 방식과 일치
+- **H2 + MySQL Profile 분리**
+  - H2로 빠른 로컬 개발, MySQL로 운영 전환 용이
+- **Maven (WAR Packaging)**
+  - 톰캣 등 WAS 배포형 프로젝트에 적합한 표준 빌드 도구
+- **Logback**
+  - 요청/응답/예외 로그 정책을 일관되게 관리
+
+---
+
+## 🗂️ 패키지 구조
 - `egov.minwon.web` : Controller
+- `egov.minwon.web.auth` : 로그인/인증 인터셉터
+- `egov.minwon.web.common` : 공통 예외/감사 처리
 - `egov.minwon.service` : Service / VO
 - `egov.minwon.service.impl` : ServiceImpl / Mapper
-- `resources/mappers` : MyBatis XML
-- `WEB-INF/jsp` : JSP View
+- `src/main/resources/mappers` : MyBatis XML
+- `src/main/webapp/WEB-INF/jsp` : JSP View
 
-## 5) 실행 방법
-### 5-1. 빌드
+---
+
+## ⚙️ 작동 방식 (요청 흐름)
+1. 사용자가 `/minwon/list.do` 접근
+2. `LoginInterceptor`가 세션의 `LOGIN_USER` 체크
+3. 인증되면 `MinwonController` 진입
+4. `MinwonServiceImpl` → `MinwonMapper` → `MinwonMapper.xml` SQL 실행
+5. 조회 결과를 JSP(`minwon/list.jsp`)에 바인딩
+6. 전 과정에서 `AuditInterceptor`가 요청/응답 로그 기록
+7. 예외 발생 시 `GlobalExceptionHandler`가 `common/error.jsp`로 처리
+
+---
+
+## 🧩 주요 코드
+
+### 1) eGov 스타일 Service 구현
+```java
+@Service("minwonService")
+public class MinwonServiceImpl extends EgovAbstractServiceImpl implements MinwonService {
+    private final MinwonMapper minwonMapper;
+
+    public MinwonServiceImpl(MinwonMapper minwonMapper) {
+        this.minwonMapper = minwonMapper;
+    }
+}
+```
+
+### 2) eGov Mapper 적용
+```java
+@Mapper("minwonMapper")
+public interface MinwonMapper {
+    List<MinwonVO> selectMinwonList();
+}
+```
+
+### 3) 인증 인터셉터 등록
+```xml
+<mvc:interceptors>
+    <mvc:interceptor>
+        <mvc:mapping path="/minwon/**"/>
+        <ref bean="loginInterceptor"/>
+    </mvc:interceptor>
+</mvc:interceptors>
+```
+
+### 4) 전역 예외 처리
+```java
+@ControllerAdvice
+public class GlobalExceptionHandler {
+    @ExceptionHandler(Exception.class)
+    public String handleException(Exception e, Model model) {
+        model.addAttribute("errorMessage", e.getMessage());
+        return "common/error";
+    }
+}
+```
+
+---
+
+## 🚀 실행 방법
+### 1) 빌드
 ```bash
 mvn clean package
 ```
 
-### 5-2. 기본 프로파일(H2)
+### 2) 기본 프로파일(H2)
 - 기본값: `h2`
-- 설정 위치: `WEB-INF/web.xml` (`spring.profiles.default`)
+- 설정 위치: `src/main/webapp/WEB-INF/web.xml`
+- 키: `spring.profiles.default`
 
-### 5-3. MySQL 프로파일 사용
-1. `web.xml`에서 `spring.profiles.default`를 `mysql`로 변경
-2. `src/main/resources/spring/context-datasource-mysql.xml`의 접속정보 수정
+### 3) MySQL 프로파일 사용
+1. `spring.profiles.default`를 `mysql`로 변경
+2. `src/main/resources/spring/context-datasource-mysql.xml` 접속정보 수정
 
-## 6) 로그인 정보 (테스트)
+---
+
+## 🔐 테스트 계정
 - ID: `admin`
 - PW: `1234`
 
-## 7) eGovFrame 반영 체크
-- `EgovAbstractServiceImpl` 적용
-- eGov `@Mapper` 적용
-- `.do` URL 패턴 적용
-- 상세 문서: `EGOVFRAME_CHECKLIST.md`
+---
 
-## 8) 로그/감사 정책
-- 설정 파일: `src/main/resources/logback.xml`
-- 감사 인터셉터: `egov.minwon.web.common.AuditInterceptor`
-  - 요청 사용자/메서드/URI/IP
-  - 응답 상태
-  - 예외 발생 정보
-
-## 9) 참고
-- DB 스키마는 `schema.sql`로 초기화됩니다(H2 기준).
-- 첫 화면은 `index.jsp`에서 `/minwon/list.do`로 리다이렉트됩니다.
+## 📌 참고
+- DB 스키마: `src/main/resources/schema.sql` (H2 시작 시 초기화)
+- 감사 로그 설정: `src/main/resources/logback.xml`
+- 상세 체크리스트: `EGOVFRAME_CHECKLIST.md`
