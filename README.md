@@ -28,6 +28,16 @@
 ---
 
 ## 🧰 기술 스택 + 선택 이유
+
+![Java](https://img.shields.io/badge/Java-8-007396?logo=openjdk&logoColor=white)
+![Spring MVC](https://img.shields.io/badge/Spring%20MVC-5.x-6DB33F?logo=spring&logoColor=white)
+![MyBatis](https://img.shields.io/badge/MyBatis-3.x-000000?logo=mybatis&logoColor=white)
+![eGovFrame](https://img.shields.io/badge/eGovFrame-RTE-1E88E5)
+![JSP](https://img.shields.io/badge/JSP%2FJSTL-View-FF8F00)
+![H2](https://img.shields.io/badge/DB-H2-09476B?logo=h2&logoColor=white)
+![MySQL](https://img.shields.io/badge/DB-MySQL-4479A1?logo=mysql&logoColor=white)
+![Maven](https://img.shields.io/badge/Build-Maven-C71A36?logo=apachemaven&logoColor=white)
+![Eclipse IDE](https://img.shields.io/badge/IDE-Eclipse-2C2255?logo=eclipseide&logoColor=white)
 - **Java 8**
   - 공공/레거시 환경 호환성이 높고 eGov 프로젝트에서 많이 사용
 - **Spring MVC**
