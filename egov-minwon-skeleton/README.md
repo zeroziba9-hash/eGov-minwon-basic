@@ -1,6 +1,6 @@
 # egov-minwon-skeleton
 
-전자정부프레임워크 스타일의 민원 관리 기본 골격 프로젝트입니다.
+전자정부프레임워크(eGovFrame) 스타일을 반영한 민원 관리 MVP 프로젝트입니다.
 
 ## 포함된 구성
 - Controller: `egov.minwon.web.MinwonController`
@@ -24,6 +24,12 @@
 ```bash
 mvn clean package
 ```
+
+## eGovFrame 반영 사항
+- `org.egovframe.rte.fdl.cmmn`, `org.egovframe.rte.psl.dataaccess` 의존성 적용
+- ServiceImpl에서 `EgovAbstractServiceImpl` 상속
+- Mapper 인터페이스에 eGov `@Mapper` 적용
+- 상세 체크리스트: `EGOVFRAME_CHECKLIST.md`
 
 ## 참고
 - DB는 H2 in-memory를 사용하며, 앱 시작 시 `schema.sql`로 테이블을 자동 생성합니다.

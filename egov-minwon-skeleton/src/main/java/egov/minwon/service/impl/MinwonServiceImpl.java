@@ -2,6 +2,7 @@ package egov.minwon.service.impl;
 
 import java.util.List;
 
+import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,7 +10,7 @@ import egov.minwon.service.MinwonService;
 import egov.minwon.service.MinwonVO;
 
 @Service("minwonService")
-public class MinwonServiceImpl implements MinwonService {
+public class MinwonServiceImpl extends EgovAbstractServiceImpl implements MinwonService {
 
     private final MinwonMapper minwonMapper;
 
