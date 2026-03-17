@@ -13,6 +13,16 @@
 
     <context:component-scan base-package="egov.minwon.web"/>
 
+    <bean id="loginInterceptor" class="egov.minwon.web.auth.LoginInterceptor"/>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/minwon/**"/>
+            <mvc:exclude-mapping path="/login.do"/>
+            <ref bean="loginInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/jsp/"/>
         <property name="suffix" value=".jsp"/>

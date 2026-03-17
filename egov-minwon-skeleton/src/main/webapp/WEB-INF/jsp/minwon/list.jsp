@@ -8,6 +8,9 @@
 </head>
 <body>
 <h2>민원 목록</h2>
+<form method="post" action="${pageContext.request.contextPath}/logout.do" style="margin-bottom:10px;">
+    <button type="submit">로그아웃</button>
+</form>
 
 <c:if test="${not empty message}">
     <p style="color: green;">${message}</p>

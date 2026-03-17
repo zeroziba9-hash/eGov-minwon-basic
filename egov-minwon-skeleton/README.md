@@ -29,8 +29,14 @@ mvn clean package
 - `org.egovframe.rte.fdl.cmmn`, `org.egovframe.rte.psl.dataaccess` 의존성 적용
 - ServiceImpl에서 `EgovAbstractServiceImpl` 상속
 - Mapper 인터페이스에 eGov `@Mapper` 적용
+- 기본 로그인/세션 인터셉터 적용 (`/login.do`)
+- 전역 예외 처리(`@ControllerAdvice`) 적용
+- DB 프로파일 분리: `h2`(기본), `mysql`
 - 상세 체크리스트: `EGOVFRAME_CHECKLIST.md`
 
 ## 참고
+- 기본 프로파일은 `h2`이며 `web.xml`의 `spring.profiles.default`로 설정됩니다.
+- MySQL 사용 시 `spring.profiles.default`를 `mysql`로 변경하세요.
 - DB는 H2 in-memory를 사용하며, 앱 시작 시 `schema.sql`로 테이블을 자동 생성합니다.
+- 로그인 테스트 계정: `admin / 1234`
 - 첫 화면은 `index.jsp`에서 `/minwon/list.do`로 리다이렉트합니다.
