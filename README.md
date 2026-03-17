@@ -1,7 +1,6 @@
 # egov-minwon-basic
 
 전자정부프레임워크(eGovFrame) 스타일을 반영한 **민원 처리 MVP** 프로젝트입니다.  
-(현재 로컬 폴더명은 `egov-minwon-skeleton`이지만, GitHub 레포명은 `egov-minwon-basic` 권장)
 
 ---
 
